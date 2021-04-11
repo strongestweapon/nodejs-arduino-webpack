@@ -1,6 +1,7 @@
 import './style.css'
 import * as THREE from 'three'
 import io from "socket.io-client"
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 const socket = io()
 let rotation = 0.0
@@ -18,12 +19,30 @@ const canvas = document.querySelector('canvas.webgl')
 
 // Scene
 const scene = new THREE.Scene();
+const loader = new GLTFLoader();
+
+let model
+
+loader.load( 'gltf/Duck.gltf', function ( gltf ) {
+
+    model = gltf.scene
+    model.position.y = -0.5
+	scene.add( model );
+
+}, undefined, function ( error ) {
+
+	console.error( error );
+
+} );
+
+const ambientLight = new THREE.AmbientLight(0xffffff, 1)
+scene.add(ambientLight)
 
 // Object
 const geometry = new THREE.BoxGeometry(1, 1, 1)
 const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
 const mesh = new THREE.Mesh(geometry, material)
-scene.add(mesh)
+//scene.add(mesh)
 
 
 // Sizes
@@ -95,7 +114,8 @@ renderer.setSize(sizes.width, sizes.height)
  {
     //console.log('tick')
      // Update objects
-     mesh.rotation.y = rotation
+     //mesh.rotation.y = rotation
+     if (model) model.rotation.y = rotation * 10
  
      // Render
      renderer.render(scene, camera)
