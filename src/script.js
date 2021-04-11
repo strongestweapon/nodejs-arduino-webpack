@@ -23,7 +23,7 @@ const loader = new GLTFLoader();
 
 let model
 
-loader.load( 'gltf/Duck.gltf', function ( gltf ) {
+loader.load( 'models/Duck.gltf', function ( gltf ) {
 
     model = gltf.scene
     model.position.y = -0.5
